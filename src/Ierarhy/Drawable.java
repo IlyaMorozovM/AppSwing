@@ -3,5 +3,8 @@ package Ierarhy;
 import java.awt.*;
 
 public interface Drawable {
-    public abstract void draw(Graphics g);
+    void draw(Graphics g);
+    Drawable resetByDots(Point[] points);
+    int getDots();
+    void setColor(Color color);
 }

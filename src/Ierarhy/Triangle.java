@@ -16,9 +16,21 @@ public class Triangle extends Line{
 
     @Override
     public void draw(Graphics g) {
-       // super.draw(g);
+        left.setColor(getColor());
+        bot.setColor(getColor());
+        right.setColor(getColor());
         bot.draw(g);
         left.draw(g);
         right.draw(g);
+    }
+
+    @Override
+    public Drawable resetByDots(Point[] points) {
+        return new Triangle( points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y);
+    }
+
+    @Override
+    public int getDots() {
+        return 3;
     }
 }
