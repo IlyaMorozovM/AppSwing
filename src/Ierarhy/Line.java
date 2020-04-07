@@ -67,11 +67,7 @@ public class Line implements Drawable {
 
     @Override
     public Drawable resetByDots(Point[] points) {
-        this.x1 = points[0].x;
-        this.y1 = points[0].y;
-        this.x2 = points[1].x;
-        this.y2 = points[1].y;
-        return new Line(this.x1, this.y1, this.x2, this.y2);
+        return new Line(points[0].x, points[0].y, points[1].x, points[1].y);
     }
 
     @Override

@@ -83,7 +83,6 @@ public class MyPanel extends JPanel {
                 temp = temp.resetByDots(points2);
                 temp.setColor(color);
                 figureList.add(temp);
-                figureCount = getZeroed(clazz).getDots();
                 count = figureCount;
                 points = new ArrayList<>();
                 repaint();

@@ -31,15 +31,7 @@ public class Rectangle extends Line{
 
     @Override
     public Drawable resetByDots(Point[] points) {
-        this.setX1(points[0].x);
-        this.setY1(points[0].y);
-        this.setX2(points[1].x);
-        this.setY2(points[1].y);
-        left = new Line(this.getX1(), this.getY1(), this.getX1(), this.getY2());
-        top = new Line(this.getX1(), this.getY1(), this.getX2(), this.getY1());
-        bot = new Line(this.getX2(), this.getY2(), this.getX1(), this.getY2());
-        right = new Line(this.getX2(), this.getY2(), this.getX2(), this.getY1());
-        return new Rectangle(this.getX1(), this.getY1(), this.getX2(), this.getY2());
+        return new Rectangle(points[0].x, points[0].y, points[1].x, points[1].y);
     }
 
     @Override

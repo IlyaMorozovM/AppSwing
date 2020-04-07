@@ -18,11 +18,7 @@ public class Ellipse extends Line {
 
     @Override
     public Drawable resetByDots(Point[] points) {
-        this.setX1(points[0].x);
-        this.setY1(points[0].y);
-        this.setX2(points[1].x);
-        this.setY2(points[1].y);
-        return new Ellipse(this.getX1(), this.getY1(), this.getX2(), this.getY2());
+        return new Ellipse(points[0].x, points[0].y, points[1].x, points[1].y);
     }
 
     @Override
