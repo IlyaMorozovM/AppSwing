@@ -1,8 +1,9 @@
 package Ierarhy;
 
 import java.awt.*;
+import java.io.Serializable;
 
-public class Line implements Drawable {
+public class Line implements Drawable, Serializable {
     private int x1;
     private int x2;
     private int y1;

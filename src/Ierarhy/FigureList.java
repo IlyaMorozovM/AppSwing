@@ -5,8 +5,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class FigureList {
+    public void setList(ArrayList<Drawable> list) {
+        this.list = list;
+    }
+
     private ArrayList<Drawable> list;
     private int xDelay = 50;
+
+    public ArrayList<Drawable> getList() {
+        return list;
+    }
 
     //to the future
     public FigureList(int xDelay) {

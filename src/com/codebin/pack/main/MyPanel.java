@@ -6,17 +6,21 @@ import Ierarhy.Line;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.event.*;
+import java.io.*;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+
 
 public class MyPanel extends JPanel {
+    private static boolean isDynamic = false;
     FigureList figureList = new FigureList();
     Class clazz = Line.class;
     int figureCount = getZeroed(clazz).getDots();
+
     int count = figureCount;
 
     Color color = Color.black;
@@ -27,15 +31,18 @@ public class MyPanel extends JPanel {
 
     private static Drawable getZeroed(Class clazz){
         Drawable drawable = null;
-        int count = clazz.getConstructors()[0].getParameterCount();
+        Constructor<?>[] constructors= clazz.getConstructors();
+        Arrays.sort(constructors,new ConstructorsComparator());
+        int count = constructors[0].getParameterCount();
         Object[] args = new Object[count];
         for (int i = 0; i < count; i++) {
-            if (clazz.getConstructors()[0].getParameterTypes()[i] == int.class) {
-                args[i] = new Integer(0);
+
+            if (constructors[0].getParameterTypes()[i] == int.class) {
+                args[i] = 0;
             }
         }
         try {
-            drawable = (Drawable) clazz.getConstructors()[0].newInstance(args);
+            drawable = (Drawable) constructors[0].newInstance(args);
         } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -43,14 +50,24 @@ public class MyPanel extends JPanel {
         return drawable;
     }
 
+    private static class ConstructorsComparator implements Comparator<Constructor<?>>
+    {
+        @Override
+        public int compare(Constructor<?> o1, Constructor<?> o2) {
+            int c1;
+            c1=o1.getParameterCount();
+            int c2;
+            c2=o2.getParameterCount();
+            return Integer.compare(c1,c2);
+        }
+    }
+
     public MyPanel(ArrayList<Class> classList) {
     super();
-    this.addMouseWheelListener(new MouseWheelListener() {
-        @Override
-        public void mouseWheelMoved(MouseWheelEvent e) {
+
+    this.addMouseWheelListener(e -> {
 //                super.mouseWheelMoved(e);
-                color = new Color((int)(Math.random() * 0x1000000));
-        }
+            color = new Color((int)(Math.random() * 0x1000000));
     });
     this.addMouseListener(new MouseAdapter() {
         @Override
@@ -65,7 +82,13 @@ public class MyPanel extends JPanel {
             //MouseButtonLRight
             else if (e.getButton() == 3){
                 clazz = chooseObject(classList);
-                figureCount = getZeroed(clazz).getDots();
+                if (isDynamic) {
+                    figureCount = dynamicPointsCount;
+                }
+                else
+                {
+                    figureCount = getZeroed(clazz).getDots();
+                }
                 count = figureCount;
                 points = new ArrayList<>();
             }
@@ -91,11 +114,91 @@ public class MyPanel extends JPanel {
 
 
     });
+
+        JButton button1 = new JButton("save");
+        JButton button2 = new JButton("load");
+
+        button1.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            if (chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+                try {
+                    serialize(figureList.getList(), chooser.getSelectedFile().getAbsolutePath());
+                } catch (IOException ex) {
+
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "alarm", JOptionPane.ERROR_MESSAGE);
+                }
+                System.out.println(chooser.getSelectedFile().getAbsolutePath());
+            }
+        });
+        button2.addActionListener(e -> {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                try {
+
+                    figureList.setList((ArrayList<Drawable>) deSerialize(chooser.getSelectedFile().getAbsolutePath()));
+                    repaint();
+                } catch (IOException | ClassNotFoundException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "alarm", JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
+        this.add(button1);
+        this.add(button2);
+
+
     }
+
+    public Object deSerialize(String pathname) throws IOException, ClassNotFoundException {
+        Object retObject = null;
+
+        FileInputStream fileIn = new FileInputStream(pathname);
+        ObjectInputStream objIn = new ObjectInputStream(fileIn);
+        retObject= objIn.readObject();
+        fileIn.close();
+        objIn.close();
+
+        return retObject;
+    }
+
+    private void serialize(Object object, String pathname) throws IOException {
+
+        FileOutputStream fileOut = new FileOutputStream(pathname);
+        ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
+        objOut.writeObject(object);
+        fileOut.close();
+        objOut.close();
+    }
+
+    private static int dynamicPointsCount = 0;
+
 
     private Class chooseObject(ArrayList<Class> classList){
         JComboBox jcb = new JComboBox(classList.toArray());
         JOptionPane.showMessageDialog( null, jcb, "Select your figure", JOptionPane.QUESTION_MESSAGE);
+
+        int temp = getZeroed((Class) jcb.getSelectedItem()).getDots();
+        if (temp < 0) {
+            dynamicPointsCount = -1;
+            isDynamic = true;
+            JFrame frame = new JFrame();
+            do {
+
+
+                Object result = JOptionPane.showInputDialog(frame, "Enter number of sides:");
+                try {
+                    dynamicPointsCount = Integer.parseInt((String) result);
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            while (dynamicPointsCount < -temp);
+        }
+        else {
+            isDynamic = false;
+        }
         return (Class) jcb.getSelectedItem();
     }
 
@@ -105,4 +208,5 @@ public class MyPanel extends JPanel {
         figureList.drawList(g);
 
     }
+
 }

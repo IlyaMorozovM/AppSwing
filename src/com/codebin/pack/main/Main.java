@@ -4,7 +4,6 @@ import Ierarhy.*;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.ServiceLoader;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,8 +18,11 @@ public class Main {
         classList.add(Triangle.class);
         classList.add(Ellipse.class);
         classList.add(Line.class);
+        classList.add(Polygon.class);
         frame.add(new MyPanel(classList));
         frame.setLocationRelativeTo(null);
+
+
 
         frame.setVisible(true);
     }
