@@ -14,7 +14,6 @@ public class Main {
     public static ClassLoader operatorsLoader;
 
     private static boolean containsClass(ArrayList<Class> classList, Class clazz) {
-
         //coercive measure in connection with the use of a dynamic classLoader
         for (Class aClass : classList) {
             if (aClass.getName().equals(clazz.getName())) {
@@ -60,12 +59,7 @@ public class Main {
     public static ArrayList<Class> getOperators(File operatorFile) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         operatorsLoader = new URLClassLoader(new URL[]{operatorFile.toURI().toURL()});
 
-        File[] files = operatorFile.listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".class");
-            }
-        });
+        File[] files = operatorFile.listFiles((dir, name) -> name.endsWith(".class"));
         ArrayList<Class> operators = new ArrayList<>();
         for (File file : files) {
             String className = file.getName().substring(0, file.getName().length() - 6);
