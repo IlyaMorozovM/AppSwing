@@ -16,6 +16,21 @@ public class Rectangle extends Line{
         right = new Line(this.getX2(), this.getY2(), this.getX2(), this.getY1());
     }
 
+    public Line getLeft() {
+        return left;
+    }
+
+    public Line getTop() {
+        return top;
+    }
+
+    public Line getBot() {
+        return bot;
+    }
+
+    public Line getRight() {
+        return right;
+    }
 
     @Override
     public void draw(Graphics g) {

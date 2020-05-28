@@ -125,13 +125,12 @@ public class MyPanel extends JPanel {
                 try {
                     serialize(figureList.getList(), chooser.getSelectedFile().getAbsolutePath());
                 } catch (IOException ex) {
-
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "alarm", JOptionPane.ERROR_MESSAGE);
-                }
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "alarm", JOptionPane.ERROR_MESSAGE); }
                 System.out.println(chooser.getSelectedFile().getAbsolutePath());
             }
         });
         button2.addActionListener(e -> {
+            Main.load(classList);
             JFileChooser chooser = new JFileChooser();
             chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
@@ -140,7 +139,10 @@ public class MyPanel extends JPanel {
                     figureList.setList((ArrayList<Drawable>) deSerialize(chooser.getSelectedFile().getAbsolutePath()));
                     repaint();
                 } catch (IOException | ClassNotFoundException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "alarm", JOptionPane.ERROR_MESSAGE);
+                // ex.printStackTrace();
+                    if (!(ex instanceof ClassNotFoundException)) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage(), "alarm", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
 
             }
@@ -151,31 +153,74 @@ public class MyPanel extends JPanel {
 
     }
 
+
+
     public Object deSerialize(String pathname) throws IOException, ClassNotFoundException {
         Object retObject = null;
 
         FileInputStream fileIn = new FileInputStream(pathname);
-        ObjectInputStream objIn = new ObjectInputStream(fileIn);
+//        ObjectInputStream objIn = new ObjectInputStream(fileIn);
+        OverInputStream objIn = new OverInputStream(fileIn);
         retObject= objIn.readObject();
-        fileIn.close();
+
         objIn.close();
+        fileIn.close();
+
+
 
         return retObject;
     }
 
     private void serialize(Object object, String pathname) throws IOException {
+//        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//        ObjectOutputStream out = null;
+//
+//
+//        ObjectInput in = null;
+//        try {
+//            out = new ObjectOutputStream(bos);
+//            out.writeObject(object);
+//            out.flush();
+//            byte[] yourBytes = bos.toByteArray();
+//
+//            ByteArrayInputStream bis = new ByteArrayInputStream(yourBytes);
+//            in = new ObjectInputStream(bis);
+//            Object o = null;
+//            try {
+//                o = in.readObject();
+//            } catch (ClassNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//
+//            System.out.println(o.equals(object));
+//        } finally {
+//            try {
+//                bos.close();
+//            } catch (IOException ex) {
+//                // ignore close exception
+//            }
+//        }
+
 
         FileOutputStream fileOut = new FileOutputStream(pathname);
+       // OutputStream buffer = new BufferedOutputStream(fileOut);
         ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
         objOut.writeObject(object);
-        fileOut.close();
         objOut.close();
+       // buffer.close();
+        fileOut.close();
+
+
     }
 
     private static int dynamicPointsCount = 0;
 
 
     private Class chooseObject(ArrayList<Class> classList){
+
+        Main.load(classList);
+
+
         JComboBox jcb = new JComboBox(classList.toArray());
         JOptionPane.showMessageDialog( null, jcb, "Select your figure", JOptionPane.QUESTION_MESSAGE);
 
