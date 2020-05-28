@@ -5,17 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class FigureList {
-    public void setList(ArrayList<Drawable> list) {
-        this.list = list;
-    }
-
     private ArrayList<Drawable> list;
     private int xDelay = 50;
-
-    public ArrayList<Drawable> getList() {
-        return list;
-    }
-
     //to the future
     public FigureList(int xDelay) {
         this.xDelay = xDelay;
@@ -26,24 +17,32 @@ public class FigureList {
         list = new ArrayList<Drawable>();
     }
 
-    public FigureList add(Drawable drawable){
+    public ArrayList<Drawable> getList() {
+        return list;
+    }
+
+    public void setList(ArrayList<Drawable> list) {
+        this.list = list;
+    }
+
+    public FigureList add(Drawable drawable) {
         list.add(drawable);
         return this;
     }
 
-    public void addAll(Collection<? extends Drawable> drawable){
+    public void addAll(Collection<? extends Drawable> drawable) {
         list.addAll(drawable);
     }
 
-    public void remove(Drawable drawable){
+    public void remove(Drawable drawable) {
         list.remove(drawable);
     }
 
-    public void remove(int index){
+    public void remove(int index) {
         list.remove(index);
     }
 
-    public void removeAll(Collection<? extends Drawable> drawable){
+    public void removeAll(Collection<? extends Drawable> drawable) {
         list.removeAll(drawable);
     }
 
@@ -55,9 +54,9 @@ public class FigureList {
         this.xDelay = xDelay;
     }
 
-    public void drawList(Graphics g){
-        for (Drawable d:list) {
-        d.draw(g);
+    public void drawList(Graphics g) {
+        for (Drawable d : list) {
+            d.draw(g);
         }
     }
 }

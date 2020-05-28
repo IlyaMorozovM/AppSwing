@@ -2,7 +2,7 @@ package Ierarhy;
 
 import java.awt.*;
 
-public class Rectangle extends Line{
+public class Rectangle extends Line {
     private Line left;
     private Line top;
     private Line bot;
@@ -38,10 +38,10 @@ public class Rectangle extends Line{
         top.setColor(getColor());
         bot.setColor(getColor());
         right.setColor(getColor());
-    left.draw(g);
-    top.draw(g);
-    bot.draw(g);
-    right.draw(g);
+        left.draw(g);
+        top.draw(g);
+        bot.draw(g);
+        right.draw(g);
     }
 
     @Override

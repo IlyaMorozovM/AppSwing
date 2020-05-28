@@ -2,7 +2,7 @@ package Ierarhy;
 
 import java.awt.*;
 
-public class Triangle extends Line{
+public class Triangle extends Line {
     private Line bot;
     private Line left;
     private Line right;
@@ -26,7 +26,7 @@ public class Triangle extends Line{
 
     @Override
     public Drawable resetByDots(Point[] points) {
-        return new Triangle( points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y);
+        return new Triangle(points[0].x, points[0].y, points[1].x, points[1].y, points[2].x, points[2].y);
     }
 
     @Override

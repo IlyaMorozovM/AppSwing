@@ -8,6 +8,17 @@ public class Polygon extends Line {
 
     private ArrayList<Point> pointsList;
 
+    public Polygon() {
+        super(0, 0, 0, 0);
+    }
+
+    public Polygon(Point... points) {
+        super(points[0].x, points[0].y, points[1].x, points[1].y);
+        assert pointsList != null;
+        pointsList = new ArrayList<Point>();
+        Collections.addAll(pointsList, points);
+    }
+
     public ArrayList<Point> getPointsList() {
         return pointsList;
     }
@@ -19,23 +30,12 @@ public class Polygon extends Line {
     @Override
     public void draw(Graphics g) {
         Point lastPoint = pointsList.get(pointsList.size() - 1);
-        for (Point point:pointsList){
+        for (Point point : pointsList) {
             Line l = new Line(lastPoint.x, lastPoint.y, point.x, point.y);
             lastPoint = point;
             l.setColor(getColor());
             l.draw(g);
         }
-    }
-
-    public Polygon() {
-        super(0,0,0,0);
-    }
-
-    public Polygon(Point ... points) {
-        super(points[0].x, points[0].y, points[1].x, points[1].y);
-        assert pointsList != null;
-        pointsList = new ArrayList<Point>();
-        Collections.addAll(pointsList, points);
     }
 
     @Override
@@ -47,8 +47,7 @@ public class Polygon extends Line {
     public int getDots() {
         if (pointsList != null) {
             return pointsList.size();
-        }
-        else
-        return -3;
+        } else
+            return -3;
     }
 }
